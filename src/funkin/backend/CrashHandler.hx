@@ -74,7 +74,7 @@ class CrashHandler
 			trace('Couldn\'t save error message. (${e.message})');
 		#end
         
-		funkin.mobile.backend.SUtil.showPopUp('$m\n$stackLabel', "Error!");
+		funkin.mobile.SUtil.showPopUp('$m\n$stackLabel', "Error!");
 
 		#if html5
 		if (flixel.FlxG.sound.music != null)
