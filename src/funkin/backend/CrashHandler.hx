@@ -9,7 +9,6 @@ import sys.io.File;
 #end
 
 using StringTools;
-using CoolUtil;
 
 /**
  * Crash Handler.
