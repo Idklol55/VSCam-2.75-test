@@ -80,7 +80,7 @@ class CopyState extends FlxState
 		}
 		else
 		{
-			flixel.FlxG.switchState(new InitState());
+			FlxG.resetGame();
 		}
 
 		super.create();
@@ -101,7 +101,7 @@ class CopyState extends FlxState
 				}
 				canUpdate = false;
 				FlxG.sound.play(Paths.audio("menu_finish", 'sfx')).onComplete = () -> {
-					flixel.FlxG.switchState(new InitState());
+					FlxG.resetGame();
 				};
 			}
 			if (maxLoopTimes == 0)
