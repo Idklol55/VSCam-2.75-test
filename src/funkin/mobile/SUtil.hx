@@ -3,9 +3,14 @@ package funkin.mobile;
 import lime.system.System as LimeSystem;
 #if android
 import android.content.Context as AndroidContext;
+import android.widget.Toast as AndroidToast;
 import android.os.Environment as AndroidEnvironment;
 import android.Permissions as AndroidPermissions;
 import android.Settings as AndroidSettings;
+import android.Tools as AndroidTools;
+import android.os.Build.VERSION as AndroidVersion;
+import android.os.Build.VERSION_CODES as AndroidVersionCode;
+// import android.os.BatteryManager as AndroidBatteryManager;
 #end
 #if sys
 import sys.FileSystem;
@@ -26,7 +31,7 @@ class SUtil
 		var daPath:String = '';
 		#if android
 		if (!FileSystem.exists(LimeSystem.applicationStorageDirectory + 'storagetype.txt'))
-			File.saveContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.storageType);
+			File.saveContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt', 'EXTERNAL_DATA');
 		var curStorageType:String = File.getContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt');
 		daPath = force ? StorageType.fromStrForce(curStorageType) : StorageType.fromStr(curStorageType);
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
