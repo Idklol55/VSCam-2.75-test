@@ -21,7 +21,7 @@ import sys.FileSystem;
 
 using StringTools;
 
-class CopyState extends MusicBeatState
+class CopyState extends FlxState
 {
 	public static var locatedFiles:Array<String> = [];
 	public static var maxLoopTimes:Int = 0;
