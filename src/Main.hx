@@ -29,6 +29,8 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
+		funkin.backend.CrashHandler.init();
+
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 
 		addChild(new FlxGame(InitState, 0, 0, 120, true));
