@@ -2,9 +2,10 @@
 <project>
 
 	<!-- application stuff -->
-	<app title="Friday Night Funkin': Vs. Camellia" file="Camellia" main="Main" version="3.0.0" company="Camellia" />
+	<app title="Friday Night Funkin': Vs. Camellia" file="Camellia" packageName="com.never2x.camellia" package="com.never2x.camellia" main="Main" version="3.0.0" company="Camellia" />
 
 	<window width="1280" height="720" fps="120" background="#000000" hardware="true" vsync="false" />
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 	<window orientation="landscape" fullscreen="false" resizable="true"/>
 	<window antialiasing="0" allow-high-dpi="true"/>
 
@@ -15,7 +16,7 @@
 	<define name="SCRIPTS_ALLOWED"/>
 	<define name="ADDONS_ALLOWED"/>
 	<define name="VIDEOS_ALLOWED" if="cpp"/>
-	<define name="DISCORD_ALLOWED"/>
+	<define name="DISCORD_ALLOWED" if="desktop"/>
 	<define name="AWARDS_ALLOWED"/>
 	
 	<!-- makes errors show exactly what the issue is instead of being vague -->
@@ -29,7 +30,7 @@
 	<source path="src" />
 	
 	<!-- use templates for assets -->
-	<section unless="mac">
+	<section unless="mac || android">
 		<assets path="assets" type="template"/>
 		<assets path="addons" type="template" if="ADDONS_ALLOWED"/>
 	</section>
@@ -38,14 +39,14 @@
 		...unless we're on macOS, then don't because lime is stupid and places
 		these folders in the wrong location in the final .app file
 	-->
-	<section if="mac">
+	<section if="mac || android">
 		<assets path="assets"/>
 		<assets path="addons" if="ADDONS_ALLOWED"/>
 	</section>
 
 	<!-- libraries -->
-	<haxelib name="lime" version="8.1.2" />
-	<haxelib name="openfl" version="9.3.3" />
+	<haxelib name="lime"/>
+	<haxelib name="openfl"/>
 	<haxelib name="flixel" version="5.5.0" />
 	<haxelib name="flixel-addons" version="3.0.2"/>
 	<haxelib name="hxdiscord_rpc" version="1.2.4" if="DISCORD_ALLOWED"/>
@@ -60,7 +61,7 @@
 	<!-- miscellaneous -->
 
 
-	<define name="FLX_NO_TOUCH" />
+	<!--<define name="FLX_NO_TOUCH" />-->
 	<!--<define name="FLX_NO_GAMEPAD"/>-->
 	<define name="FLX_NO_DEBUG" unless="debug" />
 
@@ -78,6 +79,9 @@
 
 	<!-- Fix compiling issues -->
     <setenv name="HAXEPATH" value="./"/>
+
+	<!-- Do whatever you want I'm tired uninstall and install everytime -->
+	<!-- certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" /> -->
 	
 	<assets path="alsoft.txt" rename="alsoft.ini" type="text" if="windows"/>
 	<assets path="alsoft.txt" rename="alsoft.conf" type="text" unless="windows"/>
