@@ -11,6 +11,10 @@ import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.UncaughtErrorEvent;
 
+#if mobile
+import funkin.mobile.CopyState;
+#end
+
 #if (linux && !debug)
 @:cppInclude('../../../../src/_external/gamemode_client.h') // i don't care enough to properly point back to the src folder whatever it works fuck you
 @:cppFileCode('#define GAMEMODE_AUTO')
@@ -113,6 +117,13 @@ class Main extends Sprite {
 class InitState extends flixel.FlxState {
 	override function create():Void {
 		setDefines();
+		#if mobile
+		if (!CopyState.checkExistingFiles())
+		{
+			flixel.FlxG.switchState(new CopyState());
+			return;
+		}
+		#end
 		flixel.FlxG.switchState(new TitleState());
 	}
 
