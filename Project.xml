@@ -81,7 +81,7 @@
     <setenv name="HAXEPATH" value="./"/>
 
 	<!-- Do whatever you want I'm tired uninstall and install everytime -->
-	<!-- certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" /> -->
+	<certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" />
 	
 	<assets path="alsoft.txt" rename="alsoft.ini" type="text" if="windows"/>
 	<assets path="alsoft.txt" rename="alsoft.conf" type="text" unless="windows"/>
