@@ -120,7 +120,6 @@ class Main extends Sprite {
 
 class InitState extends flixel.FlxState {
 	override function create():Void {
-		setDefines();
 		#if mobile
 		if (!CopyState.checkExistingFiles())
 		{
@@ -128,6 +127,7 @@ class InitState extends flixel.FlxState {
 			return;
 		}
 		#end
+		setDefines();
 		flixel.FlxG.switchState(new TitleState());
 	}
 
