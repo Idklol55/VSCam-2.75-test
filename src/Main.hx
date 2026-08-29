@@ -11,6 +11,10 @@ import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.UncaughtErrorEvent;
 
+#if android
+import sys.io.File;
+#end
+
 #if mobile
 import funkin.mobile.CopyState;
 #end
