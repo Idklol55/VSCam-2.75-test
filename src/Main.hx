@@ -35,10 +35,10 @@ class Main extends Sprite {
 
 		funkin.backend.CrashHandler.init();
 		#if mobile
+		Sys.setCwd(funkin.mobile.SUtil.getStorageDirectory());
 		#if android
 		funkin.mobile.SUtil.requestPermissions();
 		#end
-		Sys.setCwd(funkin.mobile.SUtil.getStorageDirectory());
 		#end
 
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
