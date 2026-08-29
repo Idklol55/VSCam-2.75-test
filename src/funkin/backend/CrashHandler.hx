@@ -75,7 +75,7 @@ class CrashHandler
 		saveErrorMessage('$m\n$stackLabel');
 		#end
 
-		CoolUtil.showPopUp('$m\n$stackLabel', "Error!");
+		SUtil.showPopUp('$m\n$stackLabel', "Error!");
 		#if DISCORD_ALLOWED DiscordClient.shutdown(); #end
 		lime.system.System.exit(1);
 	}
