@@ -132,7 +132,9 @@ class InitState extends flixel.FlxState {
 		Controls.load();
 		Settings.load();
 		Scores.load();
+		#if DISCORD_ALLOWED
 		DiscordClient.start();
+		#end
 		Addons.load();
 		Awards.load();
 		Meta.cacheFiles();
@@ -144,7 +146,7 @@ class InitState extends flixel.FlxState {
 
 		FlxG.mouse.load(openfl.display.BitmapData.fromFile('assets/images/cursor.png'));
 
-		FlxG.fullscreen = Settings.data.fullscreen;
+		FlxG.fullscreen = #if mobile true #else Settings.data.fullscreen #end;
 		FlxG.fixedTimestep = false;
 		FlxG.drawFramerate = FlxG.updateFramerate = Settings.data.framerate;
 		FlxG.game.focusLostFramerate = Math.floor(Settings.data.framerate / 4);
@@ -197,7 +199,9 @@ class InitState extends flixel.FlxState {
 		FlxG.sound.volume = FlxG.save.data.volume ?? 1.0;
 		FlxG.sound.muted = FlxG.save.data.muted ?? false;
 		FlxG.sound.volumeHandler(FlxG.sound.muted ? 0 : FlxG.sound.volume);
+		#if desktop
 		FlxG.game.soundTray.updateWithSettings();
+		#end
 
 		openfl.Lib.application.window.onClose.add(function () {
 			Main.isClosing = true;
