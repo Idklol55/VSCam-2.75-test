@@ -13,8 +13,8 @@
 	<!--<define name="IS_TESTBUILD" />-->
 
 	<!-- THIS ALSO AFFECTS MODCHARTS AS WELL KEEP THAT IN MIND -->
-	<define name="SCRIPTS_ALLOWED" if="desktop"/>
-	<define name="ADDONS_ALLOWED" if="desktop"/>
+	<define name="SCRIPTS_ALLOWED"/>
+	<define name="ADDONS_ALLOWED"/>
 	<define name="VIDEOS_ALLOWED" if="cpp"/>
 	<define name="DISCORD_ALLOWED" if="desktop"/>
 	<define name="AWARDS_ALLOWED"/>
