@@ -47,7 +47,7 @@ class CopyState extends FlxState
 		if (maxLoopTimes > 0)
 		{
 			shouldCopy = true;
-			funkin.mobile.SUtil.showPopUp("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
+			SUtil.showPopUp("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
 
 			add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d));
 
@@ -94,7 +94,7 @@ class CopyState extends FlxState
 			{
 				if (failedFiles.length > 0)
 				{
-					funkin.mobile.SUtil.showPopUp(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
+					SUtil.showPopUp(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
 					if (!FileSystem.exists('logs'))
 						FileSystem.createDirectory('logs');
 					File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
@@ -174,7 +174,7 @@ class CopyState extends FlxState
 			if (fileData == null)
 				fileData = '';
 			if (!FileSystem.exists(directory))
-				funkin.mobile.SUtil.mkDirs(directory);
+				SUtil.mkDirs(directory);
 			File.saveContent(Path.join([directory, fileName]), fileData);
 		}
 		catch (error:Dynamic)
