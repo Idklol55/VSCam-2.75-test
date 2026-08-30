@@ -14,7 +14,6 @@ import openfl.events.UncaughtErrorEvent;
 #if android
 import sys.io.File;
 #end
-
 #if mobile
 import funkin.mobile.CopyState;
 #end
@@ -37,13 +36,18 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
-		funkin.backend.CrashHandler.init();
-		#if mobile
-		Sys.setCwd(SUtil.getStorageDirectory());
 		#if android
-		SUtil.requestPermissions();
+		SUtil.doPermissionsShit();
 		#end
+
+		#if mobile
+		#if android
+		if (!FileSystem.exists(AndroidEnvironment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file')))
+			FileSystem.createDirectory(AndroidEnvironment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file'));
 		#end
+		Sys.setCwd(SUtil.getStorageDirectory());
+		#end
+		funkin.backend.CrashHandler.init();
 
 		// Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 
