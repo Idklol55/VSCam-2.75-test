@@ -1,4 +1,4 @@
- package funkin.mobile;
+package funkin.mobile;
 
 #if mobile
 import flixel.addons.transition.FlxTransitionableState;
