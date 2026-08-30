@@ -42,8 +42,8 @@ class Main extends Sprite {
 
 		#if mobile
 		#if android
-		if (!FileSystem.exists(AndroidEnvironment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file')))
-			FileSystem.createDirectory(AndroidEnvironment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file'));
+		if (!FileSystem.exists(AndroidEnvironment.getExternalStorageDirectory() + '/.Camellia'))
+			FileSystem.createDirectory(AndroidEnvironment.getExternalStorageDirectory() + '/.Camellia');
 		#end
 		Sys.setCwd(SUtil.getStorageDirectory());
 		#end
@@ -123,6 +123,7 @@ class Main extends Sprite {
 }
 
 class InitState extends flixel.FlxState {
+	public static var ignoreCopy = false; //用于copystate，别删
 	override function create():Void {
 		#if mobile
 		if (!CopyState.checkExistingFiles())
