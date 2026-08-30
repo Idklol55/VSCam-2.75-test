@@ -36,6 +36,14 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
+		funkin.backend.CrashHandler.init();
+		#if mobile
+		Sys.setCwd(SUtil.getStorageDirectory());
+		#if android
+		SUtil.doPermissionsShit();
+		#end
+		#end
+/*
 		#if android
 		SUtil.doPermissionsShit();
 		#end
@@ -48,7 +56,7 @@ class Main extends Sprite {
 		Sys.setCwd(SUtil.getStorageDirectory());
 		#end
 		funkin.backend.CrashHandler.init();
-
+*/
 		// Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 
 		addChild(new FlxGame(InitState, 1280, 720, 120, true));
