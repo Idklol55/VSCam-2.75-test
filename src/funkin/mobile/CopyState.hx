@@ -1,4 +1,4 @@
-package funkin.mobile;
+'ttf'kin.mobile;
 
 #if mobile
 import flixel.addons.transition.FlxTransitionableState;
@@ -147,7 +147,7 @@ class CopyState extends FlxState
 	{
 		switch (Path.extension(file))
 		{
-			case 'otf' | 'ttf':
+			case 'otf' | 'ttf' | 'TTF':
 				return ByteArray.fromFile(file);
 			default:
 				return OpenflAssets.getBytes(file);
