@@ -1,212 +1,140 @@
 package funkin.mobile;
 
-#if mobile
-import flixel.addons.transition.FlxTransitionableState;
-import lime.utils.Assets as LimeAssets;
-import openfl.utils.Assets as OpenflAssets;
-import flixel.addons.util.FlxAsyncLoop;
-import flixel.FlxG;
-import flixel.text.FlxText;
-import flixel.FlxSprite;
-import flixel.util.FlxColor;
-import openfl.utils.ByteArray;
-import haxe.io.Path;
-#if (target.threaded)
-import sys.thread.Thread;
+#if android
+import android.content.Context as AndroidContext;
+import android.widget.Toast as AndroidToast;
+import android.os.Environment as AndroidEnvironment;
+import android.Permissions as AndroidPermissions;
+import android.Settings as AndroidSettings;
+import android.Tools as AndroidTools;
+import android.os.Build.VERSION as AndroidVersion;
+import android.os.Build.VERSION_CODES as AndroidVersionCode;
 #end
+import lime.system.System as LimeSystem;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
 #end
 
-using StringTools;
-
-class CopyState extends FlxState
+/**
+ * A storage class for mobile.
+ * @author Mihai Alexandru (M.A. Jigsaw) and Lily (mcagabe19)
+ */
+class SUtil
 {
-	public static var locatedFiles:Array<String> = [];
-	public static var maxLoopTimes:Int = 0;
-	public static var to:String = '';
-
-	public var loadingImage:FlxSprite;
-	public var bottomBG:FlxSprite;
-	public var loadedText:FlxText;
-	public var copyLoop:FlxAsyncLoop;
-
-	var loopTimes:Int = 0;
-	var failedFiles:Array<String> = [];
-	var canUpdate:Bool = true;
-	var shouldCopy:Bool = false;
-
-	static final textFilesExtensions:Array<String> = ['ini', 'txt', 'xml', 'hxs', 'hx', 'lua', 'json', 'frag', 'vert'];
-
-	override function create()
+	#if sys
+	public static function getStorageDirectory(type:StorageType = EXTERNAL):String
 	{
-		locatedFiles = [];
-		maxLoopTimes = 0;
-		checkExistingFiles();
-		if (maxLoopTimes > 0)
-		{
-			shouldCopy = true;
-			SUtil.showPopUp("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
+		var daPath:String = '';
+		#if android
+		daPath = AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
+		daPath = haxe.io.Path.addTrailingSlash(daPath);
+		#elseif ios
+		daPath = LimeSystem.documentsDirectory;
+		#else
+		daPath = Sys.getCwd();
+		#end
 
-			add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d));
-
-			loadingImage = new FlxSprite(0, 0, Paths.image('funkay'));
-			loadingImage.setGraphicSize(0, FlxG.height);
-			loadingImage.updateHitbox();
-			loadingImage.screenCenter();
-			add(loadingImage);
-
-			bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
-			bottomBG.alpha = 0.6;
-			add(bottomBG);
-
-			loadedText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, '', 16);
-			loadedText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
-			add(loadedText);
-
-			#if (target.threaded)
-			Thread.createWithEventLoop(() -> {
-			#end
-				var ticks:Int = 15;
-				if (maxLoopTimes <= 15)
-					ticks = 1;
-				copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, ticks);
-				add(copyLoop);
-				copyLoop.start();
-			#if (target.threaded)
-			});
-			#end
-		}
-		else
-		{
-			FlxG.resetGame();
-		}
-
-		super.create();
+		return daPath;
 	}
 
-	override function update(elapsed:Float)
+	public static function mkDirs(directory:String):Void
 	{
-		if (shouldCopy && copyLoop != null)
-		{
-			if (copyLoop.finished && canUpdate)
-			{
-				if (failedFiles.length > 0)
-				{
-					SUtil.showPopUp(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
-					if (!FileSystem.exists('logs'))
-						FileSystem.createDirectory('logs');
-					File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
-				}
-				canUpdate = false;
-				FlxG.sound.play(Paths.audio("menu_finish", 'sfx')).onComplete = () -> {
-					FlxG.resetGame();
-				};
-			}
-			if (maxLoopTimes == 0)
-				loadedText.text = "Completed!";
-			else
-				loadedText.text = '$loopTimes/$maxLoopTimes';
-		}
-		super.update(elapsed);
-	}
+		var total:String = '';
+		if (directory.substr(0, 1) == '/')
+			total = '/';
 
-	public function copyAsset()
-	{
-		var file = locatedFiles[loopTimes];
-		var toFile = Path.join([to, file]);
-		loopTimes++;
-		if (!FileSystem.exists(toFile))
+		var parts:Array<String> = directory.split('/');
+		if (parts.length > 0 && parts[0].indexOf(':') > -1)
+			parts.shift();
+
+		for (part in parts)
 		{
-			var directory = Path.directory(toFile);
-			if (!FileSystem.exists(directory))
-				funkin.mobile.SUtil.mkDirs(directory);
-			try
+			if (part != '.' && part != '')
 			{
-				if (OpenflAssets.exists(getFile(file)))
+				if (total != '' && total != '/')
+					total += '/';
+
+				total += part;
+
+				try
 				{
-					if (textFilesExtensions.contains(Path.extension(file)))
-						createContentFromInternal(file);
-					else
-						File.saveBytes(toFile, getFileBytes(getFile(file)));
+					if (!FileSystem.exists(total))
+						FileSystem.createDirectory(total);
 				}
-				else
-				{
-					failedFiles.push(getFile(file) + " (File Dosen't Exist)");
-				}
-			}
-			catch (err:Dynamic)
-			{
-				failedFiles.push('${getFile(file)} ($err)');
+				catch (e:haxe.Exception)
+					trace('Error while creating folder. (${e.message}');
 			}
 		}
 	}
 
-	public static function getFileBytes(file:String):ByteArray
+	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
+			fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
 	{
-		switch (Path.extension(file))
-		{
-			case 'otf' | 'ttf' | 'TTF':
-				return ByteArray.fromFile(file);
-			default:
-				return OpenflAssets.getBytes(file);
-		}
-	}
-
-	public static function getFile(file:String):String
-	{
-		@:privateAccess
-		for(library in LimeAssets.libraries.keys()){
-			if(OpenflAssets.exists('$library:$file') && library != 'default')
-				return '$library:$file';
-		}
-		return file;
-	}
-
-	public function createContentFromInternal(file:String = 'assets/file.txt')
-	{
-		var fileName = Path.withoutDirectory(file);
-		var directory = Path.directory(Path.join([to, file]));
 		try
 		{
-			var fileData:String = OpenflAssets.getText(getFile(file));
-			if (fileData == null)
-				fileData = '';
-			if (!FileSystem.exists(directory))
-				SUtil.mkDirs(directory);
-			File.saveContent(Path.join([directory, fileName]), fileData);
+			if (!FileSystem.exists('saves'))
+				FileSystem.createDirectory('saves');
+
+			File.saveContent('saves/' + fileName + fileExtension, fileData);
+			showPopUp(fileName + " file has been saved.", "Success!");
 		}
-		catch (error:Dynamic)
-		{
-			failedFiles.push('${getFile(file)} ($error)');
-		}
+		catch (e:haxe.Exception)
+			trace('File couldn\'t be saved. (${e.message})');
 	}
 
-	public static function checkExistingFiles():Bool
+	#if android
+	public static function doPermissionsShit():Void
 	{
-		locatedFiles = OpenflAssets.list();
-		// removes unwanted assets
-		var assets = locatedFiles.filter(folder -> folder.startsWith('assets/'));
-		var addons = locatedFiles.filter(folder -> folder.startsWith('addons/'));
-		locatedFiles = assets.concat(addons);
-
-		var filesToRemove:Array<String> = [];
-		for (file in locatedFiles)
-		{
-			var toFile = Path.join([to, file]);
-			if (FileSystem.exists(toFile))
-			{
-				filesToRemove.push(file);
-			}
+		if (AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU) { // Android 13 (API level 33) and above
+			// Code for Android 13 and above
+			AndroidPermissions.requestPermissions(['READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_MEDIA_AUDIO']);
+		} else { // Android 12 and below
+			AndroidPermissions.requestPermissions(['READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']);
 		}
 
-		for (file in filesToRemove)
-			locatedFiles.remove(file);
+		if (!AndroidEnvironment.isExternalStorageManager())
+		{
+			if (AndroidVersion.SDK_INT >= AndroidVersionCode.R) //android 11(sdk 30)
+				AndroidSettings.requestSetting('MANAGE_APP_ALL_FILES_ACCESS_PERMISSION');
+		}
 
-		maxLoopTimes = locatedFiles.length;
-
-		return (maxLoopTimes < 0);
+		if ((AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU
+			&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_MEDIA_IMAGES'))
+			|| (AndroidVersion.SDK_INT < AndroidVersionCode.TIRAMISU
+				&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_EXTERNAL_STORAGE')))
+			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress OK to see what happens',
+				'Notice!');
+		try
+		{
+			if (!FileSystem.exists(SUtil.getStorageDirectory()))
+				FileSystem.createDirectory(SUtil.getStorageDirectory());
+		}
+		catch (e:Dynamic)
+		{
+			showPopUp("Please create folder to\n"
+				+ #if EXTERNAL "/storage/emulated/0/."
+				+ lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/"
+				+ lime.app.Application.current.meta.get('packageName') #else SUtil.getStorageDirectory() #end
+				+ "\nPress OK to close the game",
+				"Error!");
+			LimeSystem.exit(1);
+		}
 	}
+	#end
+
+	public static function showPopUp(message:String, title:String):Void
+	{
+		#if android
+		AndroidTools.showAlertDialog(title, message, {name: "OK", func: null}, null);
+		#else
+		FlxG.stage.window.alert(message, title);
+		#end
+	}
+	#end
 }
-#end
+
+enum StorageType
+{
+	EXTERNAL;
+}
