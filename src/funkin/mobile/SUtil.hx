@@ -27,7 +27,7 @@ class SUtil
 	{
 		var daPath:String = '';
 		#if android
-		daPath = AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
+		daPath = AndroidEnvironment.getExternalStorageDirectory() + '/.Camellia';
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
 		#elseif ios
 		daPath = LimeSystem.documentsDirectory;
