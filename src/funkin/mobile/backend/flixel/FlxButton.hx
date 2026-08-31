@@ -1,4 +1,4 @@
-package mobile.backend.flixel;
+package funkin.mobile.backend.flixel;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -14,7 +14,7 @@ import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxDestroyUtil;
-import mobile.backend.flixel.input.FlxMobileInputID;
+import funkin.mobile.backend.flixel.input.FlxMobileInputID;
 
 /**
  * A simple button class that calls a function when clicked by the touch.
