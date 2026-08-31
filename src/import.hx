@@ -40,7 +40,17 @@ import funkin.backend.audio.FlxAudio;
 import funkin.backend.LanguageHandler._t;
 import funkin.backend.LanguageHandler._formatT;
 
-// mobile
+// Mobile Controls
+#if mobile
+import funkin.mobile.objects.MobileControls;
+import funkin.mobile.objects.IMobileControls;
+import funkin.mobile.objects.Hitbox;
+import funkin.mobile.objects.TouchPad;
+import funkin.mobile.objects.TouchButton;
+import funkin.mobile.input.MobileInputID;
+import funkin.mobile.backend.MobileData;
+import funkin.mobile.input.MobileInputManager;
+#end
 import funkin.mobile.SUtil;
 
 // android
