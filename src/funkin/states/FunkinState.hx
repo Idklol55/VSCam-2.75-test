@@ -5,6 +5,7 @@ import flixel.FlxState;
 
 #if mobile
 import flixel.group.FlxGroup;
+import flixel.util.FlxDestroyUtil;
 import funkin.mobile.controls.MobileHitbox;
 import funkin.mobile.controls.MobileVirtualPad;
 #end
