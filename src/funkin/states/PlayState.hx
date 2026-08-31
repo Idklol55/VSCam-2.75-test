@@ -307,6 +307,12 @@ class PlayState extends FunkinState {
 
 		loadHUD();
 
+		#if mobile
+		addMobileControls(false);
+		hitbox.visible = true;
+		hitbox.active = true;
+		#end
+
 		Conductor.syncBeats();
 		ScriptHandler.call('create');
 
@@ -738,12 +744,6 @@ class PlayState extends FunkinState {
 		botplayTxt.visible = false;
 		botplayTxt.screenCenter();
 		botplayTxt.camera = camHUD;
-
-		#if mobile
-		addMobileControls(false);
-	//	hitbox.visible = false;
-	//	hitbox.active = false;
-		#end
 
 		updateScoreTxt();
 		updateJudgeCounter();
