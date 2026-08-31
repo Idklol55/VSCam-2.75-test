@@ -178,7 +178,7 @@ class MobileVirtualPad extends TouchInputManager
 		var cacheKey:String = path;
 		
 		#if ADDONS_ALLOWED
-		var modsPath:String = Paths.modFolders('mobile/virtualpad/${Graphic}.png');
+		var modsPath:String = Paths.get('mobile/virtualpad/${Graphic}.png');
 		if (FileSystem.exists(modsPath))
 		{
 			cacheKey = modsPath;
