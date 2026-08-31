@@ -98,6 +98,7 @@ class FunkinState extends FlxState {
 
 	override function create() {
 		super.create();
+		instance = this;
 		//Conductor.reset();
 		Paths.clearUnusedMemory();
 
