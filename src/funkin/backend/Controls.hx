@@ -137,13 +137,13 @@ class Controls {
     }
     #end
 	}
-	
-	#if mobile
-	public var isInSubstate:Bool = false;
-	public var requested(get, never):Dynamic; 
-	public var gameplayRequest(get, never):Dynamic; 
 
-	public function mobilePadPressed(keys:Array<FlxMobileInputID>):Bool
+	#if mobile
+	public static var isInSubstate:Bool = false;
+	public static var requested(get, never):Dynamic; 
+	public static var gameplayRequest(get, never):Dynamic; 
+
+	public static function mobilePadPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && requested != null && requested.virtualPad != null)
 		{
@@ -152,7 +152,7 @@ class Controls {
 		return false;
 	}
 
-	public function mobilePadJustPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function mobilePadJustPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && requested != null && requested.virtualPad != null)
 		{
@@ -161,7 +161,7 @@ class Controls {
 		return false;
 	}
 
-	public function mobilePadJustReleased(keys:Array<FlxMobileInputID>):Bool
+	public static function mobilePadJustReleased(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && requested != null && requested.virtualPad != null)
 		{
@@ -170,7 +170,7 @@ class Controls {
 		return false;
 	}
 
-	public function hitboxPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function hitboxPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && gameplayRequest != null)
 		{
@@ -179,7 +179,7 @@ class Controls {
 		return false;
 	}
 
-	public function hitboxJustPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function hitboxJustPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && gameplayRequest != null)
 		{
@@ -188,7 +188,7 @@ class Controls {
 		return false;
 	}
 
-	public function hitboxJustReleased(keys:Array<FlxMobileInputID>):Bool
+	public static function hitboxJustReleased(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && gameplayRequest != null)
 		{
@@ -198,7 +198,7 @@ class Controls {
 	}
 
 	@:noCompletion
-	private function get_requested():Dynamic
+	private static function get_requested():Dynamic
 	{	
 	//	if (isInSubstate)
 	//		return funkin.backend.MusicBeatSubstate.instance;
@@ -207,7 +207,7 @@ class Controls {
 	}
 
 	@:noCompletion
-	private function get_gameplayRequest():Dynamic
+	private static function get_gameplayRequest():Dynamic
 	{
 		if (funkin.states.FunkinState.instance != null && funkin.states.FunkinState.instance.hitbox != null)
 			return funkin.states.FunkinState.instance.hitbox;
