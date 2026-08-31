@@ -739,6 +739,12 @@ class PlayState extends FunkinState {
 		botplayTxt.screenCenter();
 		botplayTxt.camera = camHUD;
 
+		#if mobile
+		addMobileControls(false);
+		hitbox.visible = false;
+		hitbox.active = false;
+		#end
+
 		updateScoreTxt();
 		updateJudgeCounter();
 	}
