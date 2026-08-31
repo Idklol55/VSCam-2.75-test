@@ -741,8 +741,8 @@ class PlayState extends FunkinState {
 
 		#if mobile
 		addMobileControls(false);
-		hitbox.visible = false;
-		hitbox.active = false;
+	//	hitbox.visible = false;
+	//	hitbox.active = false;
 		#end
 
 		updateScoreTxt();
