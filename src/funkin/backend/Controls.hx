@@ -81,9 +81,9 @@ class Controls {
 
 	static var _save:FlxSave;
 
-	public static function justPressed(name:String):Bool return _getKeyStatus(name, JUST_PRESSED) #if mobile || mobilePadJustPressed(mobile_binds[name]) || hitboxJustPressed([name]) #end;
-	public static function pressed(name:String):Bool return _getKeyStatus(name, PRESSED) #if mobile || mobilePadPressed(mobile_binds[name]) || hitboxPressed([name]) #end;
-	public static function released(name:String):Bool return _getKeyStatus(name, JUST_RELEASED) #if mobile || mobilePadJustReleased(mobile_binds[name]) || hitboxJustReleased([name]) #end;
+	public static function justPressed(name:String):Bool return _getKeyStatus(name, JUST_PRESSED) #if mobile || mobilePadJustPressed(mobile_binds[name]) || hitboxJustPressed(mobile_binds[name]) #end;
+	public static function pressed(name:String):Bool return _getKeyStatus(name, PRESSED) #if mobile || mobilePadPressed(mobile_binds[name]) || hitboxPressed(mobile_binds[name]) #end;
+	public static function released(name:String):Bool return _getKeyStatus(name, JUST_RELEASED) #if mobile || mobilePadJustReleased(mobile_binds[name]) || hitboxJustReleased(mobile_binds[name]) #end;
 
 	// backend functions to reduce repetitive code
 	static function _getKeyStatus(name:String, state:FlxInputState):Bool {
