@@ -1,8 +1,8 @@
 package funkin.mobile.backend.flixel.input;
 
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import mobile.backend.flixel.input.FlxMobileInputID;
-import mobile.backend.flixel.FlxButton;
+import funkin.mobile.backend.flixel.input.FlxMobileInputID;
+import funkin.mobile.backend.flixel.FlxButton;
 import haxe.ds.Map;
 
 /**
