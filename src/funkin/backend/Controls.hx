@@ -11,6 +11,10 @@ import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.FlxG;
 
+#if mobile
+import funkin.mobile.backend.flixel.input.FlxMobileInputID;
+#end
+
 class Controls {
 	// Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx
 	public static final default_binds:Map<String, Array<FlxKey>> = [
@@ -56,6 +60,24 @@ class Controls {
 		'reset'			=> [Y]
 	];
 	public static var gamepad_binds:Map<String, Array<FlxGamepadInputID>> = default_gamepad_binds;
+
+	public static final default_mobile_binds:Map<String, Array<FlxMobileInputID>> = [
+		'note_left'		=> [noteLEFT, LEFT2],
+		'note_down'		=> [noteDOWN, DOWN2],
+		'note_up'		=> [noteUP, UP2],
+		'note_right'	=> [noteRIGHT, RIGHT2],
+
+		'ui_up'			=> [UP, noteUP],
+		'ui_left'		=> [LEFT, noteLEFT],
+		'ui_down'		=> [DOWN, noteDOWN],
+		'ui_right'		=> [RIGHT, noteRIGHT],
+
+		'accept'		=> [A],
+		'back'			=> [B],
+		'pause'			=> [#if android NONE #else P #end],
+		'reset'			=> [NONE]
+	];
+	public static var mobile_binds:Map<String, Array<FlxMobileInputID>> = default_mobile_binds;
 
 	static var _save:FlxSave;
 
@@ -163,4 +185,81 @@ class Controls {
 
 		if (saveToDisk) save();
 	}
+	
+	#if mobile
+	public var isInSubstate:Bool = false;
+	public var requested(get, never):Dynamic; 
+	public var gameplayRequest(get, never):Dynamic; 
+
+	public function mobilePadPressed(keys:Array<FlxMobileInputID>):Bool
+	{
+		if (keys != null && requested != null && requested.virtualPad != null)
+		{
+			if (requested.virtualPad.isAnyPressed(keys) == true) return true;
+		}
+		return false;
+	}
+
+	public function mobilePadJustPressed(keys:Array<FlxMobileInputID>):Bool
+	{
+		if (keys != null && requested != null && requested.virtualPad != null)
+		{
+			if (requested.virtualPad.isAnyJustPressed(keys) == true) return true;
+		}
+		return false;
+	}
+
+	public function mobilePadJustReleased(keys:Array<FlxMobileInputID>):Bool
+	{
+		if (keys != null && requested != null && requested.virtualPad != null)
+		{
+			if (requested.virtualPad.isAnyJustReleased(keys) == true) return true;
+		}
+		return false;
+	}
+
+	public function hitboxPressed(keys:Array<FlxMobileInputID>):Bool
+	{
+		if (keys != null && gameplayRequest != null)
+		{
+			if (gameplayRequest.isAnyPressed(keys)) return true;
+		}
+		return false;
+	}
+
+	public function hitboxJustPressed(keys:Array<FlxMobileInputID>):Bool
+	{
+		if (keys != null && gameplayRequest != null)
+		{
+			if (gameplayRequest.isAnyJustPressed(keys)) return true;
+		}
+		return false;
+	}
+
+	public function hitboxJustReleased(keys:Array<FlxMobileInputID>):Bool
+	{
+		if (keys != null && gameplayRequest != null)
+		{
+			if (gameplayRequest.isAnyJustReleased(keys)) return true;
+		}
+		return false;
+	}
+
+	@:noCompletion
+	private function get_requested():Dynamic
+	{	
+	//	if (isInSubstate)
+	//		return funkin.backend.MusicBeatSubstate.instance;
+	//	else
+		return funkin.states.FunkinState.instance;
+	}
+
+	@:noCompletion
+	private function get_gameplayRequest():Dynamic
+	{
+		if (funkin.states.FunkinState.instance != null && funkin.states.FunkinState.instance.hitbox != null)
+			return funkin.states.FunkinState.instance.hitbox;
+		return null;
+	}
+	#end
 }
