@@ -81,9 +81,9 @@ class Controls {
 
 	static var _save:FlxSave;
 
-	public static function justPressed(name:String):Bool return _getKeyStatus(name, JUST_PRESSED) #if mobile || hitboxJustPressed(mobile_binds[name]) #end;
-	public static function pressed(name:String):Bool return _getKeyStatus(name, PRESSED) #if mobile || hitboxPressed(mobile_binds[name]) #end;
-	public static function released(name:String):Bool return _getKeyStatus(name, JUST_RELEASED) #if mobile || hitboxJustReleased(mobile_binds[name]) #end;
+	public static function justPressed(name:String):Bool return _getKeyStatus(name, JUST_PRESSED) #if mobile || mobilePadJustPressed(mobile_binds[name]) || hitboxJustPressed(mobile_binds[name]) #end;
+	public static function pressed(name:String):Bool return _getKeyStatus(name, PRESSED) #if mobile || mobilePadPressed(mobile_binds[name]) || hitboxPressed(mobile_binds[name]) #end;
+	public static function released(name:String):Bool return _getKeyStatus(name, JUST_RELEASED) #if mobile || mobilePadJustReleased(mobile_binds[name]) || hitboxJustReleased(mobile_binds[name]) #end;
 
 	// backend functions to reduce repetitive code
 	static function _getKeyStatus(name:String, state:FlxInputState):Bool {
@@ -136,54 +136,6 @@ class Controls {
         Reflect.callMethod(gamepad, Reflect.field(gamepad, "rumble"), [intensity, intensity, duration]);
     }
     #end
-	}
-
-	public static function save() {
-		_save.data.binds = binds;
-		_save.flush();
-	}
-
-	public static function load() {
-		if (_save == null) {
-			_save = new FlxSave();
-			_save.bind('controls', Util.getSavePath());
-		}
-
-		if (_save.data.binds != null) {
-			var loadedKeys:Map<String, Array<FlxKey>> = _save.data.binds;
-			for (control => keys in loadedKeys) {
-				if (!binds.exists(control)) continue;
-				binds.set(control, keys);
-			}
-		}
-	}
-
-	@:noDebug @:pure public static function convertStrumKey(arr:Array<String>, key:FlxKey):Int {
-		if (key == NONE) return -1;
-		for (i in 0...arr.length) {
-			for (possibleKey in binds[arr[i]]) {
-				if (key == possibleKey) return i;
-			}
-		}
-
-		return -1;
-	}
-
-	// because openfl inlines it for some reason
-	// @:noDebug to reduce overhead from calling it
-    @:noDebug @:pure public static function convertLimeKeyCode(code:KeyCode):Int {
-        @:privateAccess
-        return inline openfl.ui.Keyboard.__convertKeyCode(code);
-    }
-
-
-	public static function reset(?saveToDisk:Bool = false) {
-		for (key in binds.keys()) {
-			if (!default_binds.exists(key)) continue;
-			binds.set(key, default_binds.get(key).copy());
-		}
-
-		if (saveToDisk) save();
 	}
 	
 	#if mobile
@@ -262,4 +214,52 @@ class Controls {
 		return null;
 	}
 	#end
+
+	public static function save() {
+		_save.data.binds = binds;
+		_save.flush();
+	}
+
+	public static function load() {
+		if (_save == null) {
+			_save = new FlxSave();
+			_save.bind('controls', Util.getSavePath());
+		}
+
+		if (_save.data.binds != null) {
+			var loadedKeys:Map<String, Array<FlxKey>> = _save.data.binds;
+			for (control => keys in loadedKeys) {
+				if (!binds.exists(control)) continue;
+				binds.set(control, keys);
+			}
+		}
+	}
+
+	@:noDebug @:pure public static function convertStrumKey(arr:Array<String>, key:FlxKey):Int {
+		if (key == NONE) return -1;
+		for (i in 0...arr.length) {
+			for (possibleKey in binds[arr[i]]) {
+				if (key == possibleKey) return i;
+			}
+		}
+
+		return -1;
+	}
+
+	// because openfl inlines it for some reason
+	// @:noDebug to reduce overhead from calling it
+    @:noDebug @:pure public static function convertLimeKeyCode(code:KeyCode):Int {
+        @:privateAccess
+        return inline openfl.ui.Keyboard.__convertKeyCode(code);
+    }
+
+
+	public static function reset(?saveToDisk:Bool = false) {
+		for (key in binds.keys()) {
+			if (!default_binds.exists(key)) continue;
+			binds.set(key, default_binds.get(key).copy());
+		}
+
+		if (saveToDisk) save();
+	}
 }
