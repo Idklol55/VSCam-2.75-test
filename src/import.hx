@@ -42,14 +42,9 @@ import funkin.backend.LanguageHandler._formatT;
 
 // mobile controls
 #if mobile
-import funkin.mobile.objects.MobileControls;
-import funkin.mobile.objects.IMobileControls;
-import funkin.mobile.objects.Hitbox;
-import funkin.mobile.objects.TouchPad;
-import funkin.mobile.objects.TouchButton;
-import funkin.mobile.input.MobileInputID;
-// import funkin.mobile.backend.MobileData;
-import funkin.mobile.input.MobileInputManager;
+import funkin.mobile.*;
+import funkin.mobile.backend.*;
+// import lime.system.JNI;
 #end
 import funkin.mobile.SUtil;
 
