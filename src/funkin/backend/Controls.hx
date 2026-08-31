@@ -81,9 +81,9 @@ class Controls {
 
 	static var _save:FlxSave;
 
-	public static function justPressed(name:String):Bool return _getKeyStatus(name, JUST_PRESSED) #if mobile || mobilePadJustPressed(mobile_binds[name]) == true || hitboxJustPressed(mobile_binds[name]) == true #end;
-	public static function pressed(name:String):Bool return _getKeyStatus(name, PRESSED) #if mobile || mobilePadPressed(mobile_binds[name]) == true || hitboxPressed(mobile_binds[name]) == true #end;
-	public static function released(name:String):Bool return _getKeyStatus(name, JUST_RELEASED) #if mobile || mobilePadJustReleased(mobile_binds[name]) == true || hitboxJustReleased(mobile_binds[name]) == true #end;
+	public static function justPressed(name:String):Bool return _getKeyStatus(name, JUST_PRESSED) #if mobile || mobilePadJustPressed(mobile_binds[name]) || hitboxJustPressed([name]) #end;
+	public static function pressed(name:String):Bool return _getKeyStatus(name, PRESSED) #if mobile || mobilePadPressed(mobile_binds[name]) || hitboxPressed([name]) #end;
+	public static function released(name:String):Bool return _getKeyStatus(name, JUST_RELEASED) #if mobile || mobilePadJustReleased(mobile_binds[name]) || hitboxJustReleased([name]) #end;
 
 	// backend functions to reduce repetitive code
 	static function _getKeyStatus(name:String, state:FlxInputState):Bool {
@@ -139,11 +139,11 @@ class Controls {
 	}
 
 	#if mobile
-	static public var isInSubstate:Bool = false;
-	static public var requested(get, never):Dynamic; 
-	static public var gameplayRequest(get, never):Dynamic; 
+	public static var isInSubstate:Bool = false;
+	public static var requested(get, never):Dynamic; 
+	public static var gameplayRequest(get, never):Dynamic; 
 
-	static function mobilePadPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function mobilePadPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && requested != null && requested.virtualPad != null)
 		{
@@ -152,7 +152,7 @@ class Controls {
 		return false;
 	}
 
-	static function mobilePadJustPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function mobilePadJustPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && requested != null && requested.virtualPad != null)
 		{
@@ -161,7 +161,7 @@ class Controls {
 		return false;
 	}
 
-	static function mobilePadJustReleased(keys:Array<FlxMobileInputID>):Bool
+	public static function mobilePadJustReleased(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && requested != null && requested.virtualPad != null)
 		{
@@ -170,7 +170,7 @@ class Controls {
 		return false;
 	}
 
-	static function hitboxPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function hitboxPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && gameplayRequest != null)
 		{
@@ -179,7 +179,7 @@ class Controls {
 		return false;
 	}
 
-	static function hitboxJustPressed(keys:Array<FlxMobileInputID>):Bool
+	public static function hitboxJustPressed(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && gameplayRequest != null)
 		{
@@ -188,7 +188,7 @@ class Controls {
 		return false;
 	}
 
-	static function hitboxJustReleased(keys:Array<FlxMobileInputID>):Bool
+	public static function hitboxJustReleased(keys:Array<FlxMobileInputID>):Bool
 	{
 		if (keys != null && gameplayRequest != null)
 		{
@@ -200,6 +200,9 @@ class Controls {
 	@:noCompletion
 	private static function get_requested():Dynamic
 	{
+	//	if (isInSubstate)
+	//		return funkin.backend.MusicBeatSubstate.instance;
+	//	else
 		return funkin.states.FunkinState.instance;
 	}
 
