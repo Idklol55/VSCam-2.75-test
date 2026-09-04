@@ -6,7 +6,7 @@ on:
 jobs:
   buildAndroid:
     name: buildAndroid
-    runs-on: macos-14
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -42,17 +42,20 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib git lime https://github.com/kittycathy233/lime --quiet
-          haxelib install openfl 9.3.3 --quiet
-          haxelib install flixel 5.5.0 --quiet
-          haxelib git hscript-iris https://github.com/crowplexus/hscript-iris --quiet
-          haxelib install flixel-animate --quiet
-          haxelib git moonchart https://github.com/MaybeMaru/moonchart --quiet
-          haxelib install hxvlc 1.9.2 --quiet
-          haxelib git hxcpp https://github.com/kittycathy233/hxcpp --quiet
-          haxelib install hxdiscord_rpc 1.2.4 --quiet
-          haxelib install hxjson5 --quiet
-          haxelib install flixel-addons 3.0.2 --quiet
+          haxelib install hxcpp > /dev/null
+          haxelib install lime 8.0.1
+          haxelib install openfl 9.2.2
+          haxelib install flixel 5.2.2
+          haxelib install flixel-tools
+          haxelib install flixel-ui 2.5.0
+          haxelib install flixel-addons 3.1.1
+          haxelib install tjson 1.4.0
+          haxelib install hxjsonast
+          haxelib git linc_luajit https://github.com/AndreiRudenko/linc_luajit
+          haxelib install hscript
+          haxelib git hscript-ex https://github.com/ianharrigan/hscript-ex
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib install hxcpp-debug-server
           haxelib list
       
       - name: Setup Lime
